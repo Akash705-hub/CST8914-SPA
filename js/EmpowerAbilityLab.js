@@ -18,17 +18,20 @@ const routes = {
     home: {
         sectionId: "home",
         title: "Empower Ability Labs - Home",
-        focusTargetId: "home-heading"
+        focusTargetId: "home-heading",
+        path: "/"
     },
     services: {
         sectionId: "services",
         title: "Empower Ability Labs - Services",
-        focusTargetId: "services-heading"
+        focusTargetId: "services-heading",
+        path: "/services"
     },
     schedule: {
         sectionId: "schedule",
         title: "Empower Ability Labs - Schedule a Call",
-        focusTargetId: "schedule-heading"
+        focusTargetId: "schedule-heading",
+        path: "/schedule"
     }
 };
 
@@ -50,27 +53,35 @@ function setupSpaNavigation() {
 
     // Added browser Back/Forward support using popstate
     window.addEventListener("popstate", (event) => {
-        const routeName = event.state?.route || getRouteFromHash() || "home";
+        const routeName = event.state?.route || getRouteFromPath() || "home";
         navigateTo(routeName, false);
     });
 
     // Added initial route detection when the page first loads
-    const initialRoute = getRouteFromHash() || "home";
+    const initialRoute = getRouteFromPath() || "home";
     navigateTo(initialRoute, false);
 }
 
-// Added helper to read the current hash and convert it into a valid route
-function getRouteFromHash() {
-    const hash = window.location.hash.replace("#", "").trim().toLowerCase();
+// Changed: Helper to read the current path and convert it into a valid route
+function getRouteFromPath() {
+    const path = window.location.pathname;
 
-    if (routes[hash]) {
-        return hash;
+    // Find matching route by path
+    for (const [routeName, routeData] of Object.entries(routes)) {
+        if (routeData.path === path) {
+            return routeName;
+        }
+    }
+
+    // Default to home for root path or unknown paths
+    if (path === "/" || path === "/index.html" || path === "/EmpowerAbilityLab.html") {
+        return "home";
     }
 
     return null;
 }
 
-// Added main SPA navigation logic to show the correct section and update history/title/focus
+// Changed: Main SPA navigation logic using paths instead of hashes
 function navigateTo(routeName, shouldPushState) {
     const route = routes[routeName] || routes.home;
     const allSections = document.querySelectorAll("main section");
@@ -81,12 +92,12 @@ function navigateTo(routeName, shouldPushState) {
         section.hidden = section.id !== route.sectionId;
     });
 
-    // Updated page title for each SPA view as required by the professor
+    // Updated page title for each SPA view
     document.title = route.title;
 
-    // Updated the URL hash and history state for browser navigation support
+    // Changed: Updated the URL using path instead of hash
     if (shouldPushState) {
-        history.pushState({ route: routeName }, "", `#${routeName}`);
+        history.pushState({ route: routeName }, "", route.path);
     }
 
     // Updated aria-current so screen readers know which nav item is active
@@ -99,6 +110,15 @@ function navigateTo(routeName, shouldPushState) {
             link.removeAttribute("aria-current");
         }
     });
+
+    // Only move focus when user clicks navigation (not on initial page load)
+    if (shouldPushState) {
+        const focusTarget = document.getElementById(route.focusTargetId);
+        if (focusTarget) {
+            focusTarget.setAttribute("tabindex", "-1");
+            focusTarget.focus();
+        }
+    }
 }
 
 // Added logic to show or hide the event details textarea when the speaker checkbox changes
@@ -134,13 +154,14 @@ function setupSpeakerToggle() {
     updateEventDetailsVisibility();
 }
 
-// Added accessible switch behavior using role="switch" and aria-checked
+// Added accessible switch behavior using Bootstrap form-switch
 function setupEmailSwitch() {
     const emailSwitch = document.getElementById("email-updates-switch");
-    // Guard clause in case the switch button is missing
+    // Guard clause in case the switch is missing
     if (!emailSwitch) {
         return;
     }
+    // Native checkbox handles everything automatically
 }
 
 // Added complete accessible form validation and user feedback behavior
@@ -197,7 +218,7 @@ function setupFormValidation() {
 
         const errors = [];
 
-        // Added email required validation because the professor explicitly requires email
+        // Added email required validation
         if (!email.value.trim()) {
             errors.push("Email is required.");
             email.setAttribute("aria-invalid", "true");
@@ -212,18 +233,18 @@ function setupFormValidation() {
             phoneNumber.setAttribute("aria-invalid", "true");
         }
 
-        // Added topic selection validation to make the form more complete and user-friendly
+        // Added topic selection validation
         if (!hasSelectedTopic()) {
             errors.push("Please select at least one topic.");
         }
 
-        // Added conditional validation for the event details textarea when speaker option is selected
+        // Added conditional validation for the event details textarea
         if (speakerCheckbox && speakerCheckbox.checked && !eventDetails.value.trim()) {
             errors.push("Please tell us about your event.");
             eventDetails.setAttribute("aria-invalid", "true");
         }
 
-        // If errors exist, show them in an aria-live region and move focus there
+        // If errors exist, show them in an aria-live region
         if (errors.length > 0) {
             const errorList = document.createElement("ul");
 
@@ -235,27 +256,24 @@ function setupFormValidation() {
 
             formErrors.innerHTML = "";
             formErrors.appendChild(errorList);
-            formErrors.hidden = false; // Show the error container
+            formErrors.hidden = false;
             formErrors.setAttribute("tabindex", "-1");
             formErrors.focus();
             return;
         }
 
-        // Added success message for accessible user notification after valid submission
-        const emailUpdatesEnabled =
-            emailSwitch && emailSwitch.getAttribute("aria-checked") === "true";
+        // Changed: Check native checkbox .checked property
+        const emailUpdatesEnabled = emailSwitch && emailSwitch.checked;
 
-        // In success message section:
         formStatus.textContent =
             `Thank you! Your request has been submitted successfully. ` +
             `We will contact you at ${email.value.trim()} soon.` +
             (emailUpdatesEnabled ? " You are also subscribed to updates and services emails." : "");
 
-        formStatus.hidden = false; // Show the success container
-        // Added form reset after successful submission
+        formStatus.hidden = false;
         form.reset();
 
-        // Added reset for dependent UI elements after successful submission
+        // Reset dependent UI elements
         if (speakerCheckbox) {
             speakerCheckbox.setAttribute("aria-expanded", "false");
         }
@@ -265,12 +283,7 @@ function setupFormValidation() {
             eventDetailsGroup.hidden = true;
         }
 
-        if (emailSwitch) {
-            emailSwitch.setAttribute("aria-checked", "false");
-            emailSwitch.textContent = "Off";
-        }
-
-        // Moved focus to the success message so screen reader users hear the confirmation
+        // Moved focus to the success message
         formStatus.setAttribute("tabindex", "-1");
         formStatus.focus();
     });
