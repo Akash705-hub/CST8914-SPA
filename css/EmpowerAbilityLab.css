@@ -2,6 +2,24 @@ body {
   padding-top: 5.5rem;
 }
 
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    padding-top: 5.5rem;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
 /* Custom toggle switch colors */
 .form-switch .form-check-input:checked {
     background-color: #198754; /* Bootstrap success green */
