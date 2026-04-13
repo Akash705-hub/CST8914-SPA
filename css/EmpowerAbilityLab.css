@@ -12,7 +12,36 @@ body {
     flex-direction: column;
 }
 
-/* Screen reader only text - hidden visually but accessible to assistive technology */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2c3e50; /* Same as navbar */
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    z-index: 10000;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transition: top 0.3s ease-in-out;
+    white-space: nowrap;
+}
+
+.skip-link:focus {
+    top: 1rem;
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3);
+}
+
+.skip-link:hover {
+    background: #1a252f; /* Darker shade for hover */
+    color: #fff;
+}
+
 .screen-reader-text {
     position: absolute;
     left: -10000px;
@@ -21,62 +50,30 @@ body {
     overflow: hidden;
 }
 
-/* External link icon styling */
 .fa-external-link-alt {
     font-size: 0.75em;
     margin-left: 0.25rem;
     vertical-align: super;
 }
 
-/* Custom toggle switch colors */
-/*.form-switch .form-check-input:checked {
-    background-color: #198754;*/ /* Bootstrap success green */
-/*border-color: #198754;
-}
-
-.form-switch .form-check-input:focus {
-    border-color: #86b7fe;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}*/
-
-/* Increase size of switch control */
 .form-switch .form-check-input {
     width: 3em;
     height: 1.5em;
     cursor: pointer;
 }
 
-.navbar-brand {
-    color: #ffffff !important; /* White color for logo text */
-}
-
-.navbar-brand:hover,
-.navbar-brand:focus 
-{
-        color: #adb5bd !important; /* Light gray on hover for visual feedback */
-}
-
-/* Fixed header colors for WCAG contrast compliance */
 .bg-dark {
-    background-color: #2c3e50 !important; /* Dark blue-gray - better than pure black */
+    background-color: #2c3e50 !important;
 }
 
 .nav-link {
-    color: #ffffff !important; /* White text on dark background = Good contrast (12.6:1) */
+    color: #ffffff !important;
 }
 
 .nav-link:hover,
 .nav-link:focus {
-    color: #adb5bd !important; /* Light gray on hover */
+        color: #adb5bd !important; /* Light gray on hover */
 }
-
-/*.bg-dark {
-    background-color: lightgray !important;
-}
-
-.nav-link{
-    color: black !important
-}*/
 
 .form-switch .form-check-label {
     padding-left: 0.5rem;
@@ -96,23 +93,21 @@ body {
     font-style: italic;
 }
 
-/* Add spacing between checkboxes */
 fieldset.form-group .form-check {
     margin-bottom: 0.5rem;
 }
 
-/* Form group spacing */
 .form-group {
     margin-bottom: 1rem;
 }
 
-/* Inline field error styling */
+
 .field-error {
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
 
-/* Ensure invalid fields have visual indicator */
+
 .form-control[aria-invalid="true"],
 .form-check-input[aria-invalid="true"] {
     border-color: #dc3545;
@@ -121,8 +116,14 @@ fieldset.form-group .form-check {
 
 .form-control[aria-invalid="true"]:focus,
 .form-check-input[aria-invalid="true"]:focus {
-        border-color: #dc3545;
-        box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+@media print {
+    header, footer, .skip-link {
+        display: none;
+    }
 }
 
 footer {
