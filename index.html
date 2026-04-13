@@ -18,8 +18,12 @@
     <title>Empower Ability Labs - Home</title>
 
     <!-- Kept Bootstrap CSS stylesheet -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" 
+          integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Kept custom stylesheet for project-specific styles -->
     <link rel="stylesheet" href="./css/EmpowerAbilityLab.css">
@@ -92,9 +96,10 @@
                             individuals with disabilities and navigate the world from their perspective.
                         </p>
 
-                        <a href="https://www.google.com/search/howsearchworks/our-approach/" target="_blank"
+                        <a href="https://www.google.com/search/howsearchworks/our-approach/" 
+                           target="_blank"
                            rel="noopener noreferrer">
-                            Learn more
+                            Learn more<span class="screen-reader-text"> opens a new window</span><i class="fas fa-external-link-alt" aria-hidden="true"></i>
                         </a>
                     </div>
 
@@ -108,8 +113,10 @@
                                 <li>Inspirational speakers.</li>
                             </ul>
                         </p>
-                        <a href="https://www.elevenways.be/en/services" target="_blank" rel="noopener noreferrer">
-                            Learn more
+                        <a href="https://www.elevenways.be/en/services" 
+                           target="_blank" 
+                           rel="noopener noreferrer">
+                            Learn more<span class="screen-reader-text"> opens a new window</span><i class="fas fa-external-link-alt" aria-hidden="true"></i>
                         </a>
                     </div>
 
@@ -117,13 +124,14 @@
                         <h3>Testimonials</h3>
                         <p>
                             Invite a speaker with disabilities to share their unique journey. This captivating addition to your
-                            upcoming event will offer insights that resonate, inspire, educate, and enrich your team’s understanding
+                            upcoming event will offer insights that resonate, inspire, educate, and enrich your team's understanding
                             of inclusion.
                         </p>
 
-                        <a href="https://dictionary.cambridge.org/us/dictionary/english/testimonial" target="_blank"
+                        <a href="https://dictionary.cambridge.org/us/dictionary/english/testimonial" 
+                           target="_blank"
                            rel="noopener noreferrer">
-                            Learn more
+                            Learn more<span class="screen-reader-text"> opens a new window</span><i class="fas fa-external-link-alt" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>
@@ -187,18 +195,18 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label for="email" class="form-label">Email <span aria-hidden="true">*</span></label>
+                            <label for="email" class="form-label">
+                                Email <span class="required-indicator" aria-hidden="true">(Required)</span>
+                            </label>
                             <input type="email" class="form-control" id="email" name="email" required aria-required="true">
                         </div>
                     </div>
                 </div>
                 <div class="form-group mb-3">
                     <label for="phone-number" class="form-label">Phone number</label>
-                    <input type="tel" class="form-control" id="phone-number" name="phone-number" placeholder="613-123-1234"
-                           aria-describedby="phone-help">
+                    <input type="tel" class="form-control" id="phone-number" name="phone-number" placeholder="613-123-1234">
                 </div>
 
-                <!-- What would you like to talk about with separator line -->
                 <fieldset class="form-group mb-3">
                     <legend class="form-label">What would you like to talk about?</legend>
                     <div class="form-check">
