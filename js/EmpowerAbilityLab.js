@@ -207,62 +207,98 @@ function setupFormValidation() {
         [businessName, phoneNumber, email, eventDetails].forEach((field) => {
             if (field) {
                 field.removeAttribute("aria-invalid");
+                field.removeAttribute("aria-describedby");
             }
         });
+
+        // Clear any previous error messages
+        document.querySelectorAll('.field-error').forEach(el => el.remove());
     }
 
-    // Added submit handler with accessible validation and thank-you feedback
+    // Added submit handler with accessible validation and focus management
     form.addEventListener("submit", (event) => {
         event.preventDefault();
         clearErrors();
 
         const errors = [];
+        let firstErrorField = null;
 
         // Added email required validation
         if (!email.value.trim()) {
-            errors.push("Email is required.");
+            errors.push({ field: email, message: "Email is required." });
             email.setAttribute("aria-invalid", "true");
+            if (!firstErrorField) firstErrorField = email;
         } else if (!email.validity.valid) {
-            errors.push("Please enter a valid email address.");
+            errors.push({ field: email, message: "Please enter a valid email address." });
             email.setAttribute("aria-invalid", "true");
+            if (!firstErrorField) firstErrorField = email;
         }
 
         // Added phone validation for the required displayed format
         if (!isValidPhone(phoneNumber.value)) {
-            errors.push("Phone number must use the format 613-123-1234.");
+            errors.push({ field: phoneNumber, message: "Phone number must use the format 613-123-1234." });
             phoneNumber.setAttribute("aria-invalid", "true");
+            if (!firstErrorField) firstErrorField = phoneNumber;
         }
 
         // Added topic selection validation
         if (!hasSelectedTopic()) {
-            errors.push("Please select at least one topic.");
+            errors.push({ field: document.querySelector('input[name="topic"]'), message: "Please select at least one topic." });
+            // First topic checkbox will get focus if this is the first error
+            if (!firstErrorField) firstErrorField = document.querySelector('input[name="topic"]');
         }
 
         // Added conditional validation for the event details textarea
         if (speakerCheckbox && speakerCheckbox.checked && !eventDetails.value.trim()) {
-            errors.push("Please tell us about your event.");
+            errors.push({ field: eventDetails, message: "Please tell us about your event." });
             eventDetails.setAttribute("aria-invalid", "true");
+            if (!firstErrorField) firstErrorField = eventDetails;
         }
 
-        // If errors exist, show them in an aria-live region
+        // If errors exist, show them and focus the first error field
         if (errors.length > 0) {
+            // Build error summary for screen readers
             const errorList = document.createElement("ul");
-
-            errors.forEach((message) => {
+            errors.forEach(({ message }) => {
                 const listItem = document.createElement("li");
                 listItem.textContent = message;
                 errorList.appendChild(listItem);
             });
 
-            formErrors.innerHTML = "";
+            formErrors.innerHTML = `<p><strong>${errors.length} error${errors.length > 1 ? 's' : ''} found:</strong></p>`;
             formErrors.appendChild(errorList);
             formErrors.hidden = false;
-            formErrors.setAttribute("tabindex", "-1");
-            formErrors.focus();
+
+            // Add inline error messages next to each field
+            errors.forEach(({ field, message }) => {
+                if (field && field.parentElement) {
+                    const errorSpan = document.createElement('span');
+                    errorSpan.className = 'field-error text-danger small d-block mt-1';
+                    errorSpan.id = `${field.id}-error`;
+                    errorSpan.textContent = message;
+                    errorSpan.setAttribute('role', 'alert');
+                    
+                    field.parentElement.appendChild(errorSpan);
+                    field.setAttribute('aria-describedby', `${field.id}-error`);
+                }
+            });
+
+            // Focus the first field with an error (WCAG 3.3.1 - Error Identification)
+            if (firstErrorField) {
+                firstErrorField.focus();
+                
+                // Scroll to the field if it's not in view
+                firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // Announce errors to screen readers
+            const announcement = `Form has ${errors.length} error${errors.length > 1 ? 's' : ''}. Please correct the errors and try again.`;
+            announceToScreenReader(announcement);
+            
             return;
         }
 
-        // Changed: Check native checkbox .checked property
+        // Success handling
         const emailUpdatesEnabled = emailSwitch && emailSwitch.checked;
 
         formStatus.textContent =
@@ -286,7 +322,23 @@ function setupFormValidation() {
         // Moved focus to the success message
         formStatus.setAttribute("tabindex", "-1");
         formStatus.focus();
+        formStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
+
+    // Helper function to announce messages to screen readers
+    function announceToScreenReader(message) {
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.className = 'visually-hidden';
+        announcement.textContent = message;
+        document.body.appendChild(announcement);
+        
+        // Remove after announcement
+        setTimeout(() => {
+            document.body.removeChild(announcement);
+        }, 1000);
+    }
 }
 
 // Kept the final function call so the script runs after loading
