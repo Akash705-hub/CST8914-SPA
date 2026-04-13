@@ -25,17 +25,17 @@ const routes = {
     home: {
         sectionId: "home",
         title: "Empower Ability Labs - Home",
-        path: "/"
+        path: "/CST8914-SPA"
     },
     services: {
         sectionId: "services",
         title: "Empower Ability Labs - Services",
-        path: "/services"
+        path: "/CST8914-SPA/services"
     },
     schedule: {
         sectionId: "schedule",
         title: "Empower Ability Labs - Schedule a Call",
-        path: "/schedule"
+        path: "/CST8914-SPA/schedule"
     }
 };
 
