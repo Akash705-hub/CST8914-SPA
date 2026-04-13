@@ -1,5 +1,5 @@
-body {
-  padding-top: 5.5rem;
+main {
+    flex: 1 0 auto;
 }
 
 html, body {
@@ -7,29 +7,37 @@ html, body {
 }
 
 body {
+    padding-top: 5.5rem;
     display: flex;
     flex-direction: column;
-    padding-top: 5.5rem;
 }
 
-main {
-    flex: 1 0 auto;
+/* Screen reader only text - hidden visually but accessible to assistive technology */
+.screen-reader-text {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
 }
 
-footer {
-    flex-shrink: 0;
+/* External link icon styling */
+.fa-external-link-alt {
+    font-size: 0.75em;
+    margin-left: 0.25rem;
+    vertical-align: super;
 }
 
 /* Custom toggle switch colors */
-.form-switch .form-check-input:checked {
-    background-color: #198754; /* Bootstrap success green */
-    border-color: #198754;
+/*.form-switch .form-check-input:checked {
+    background-color: #198754;*/ /* Bootstrap success green */
+/*border-color: #198754;
 }
 
 .form-switch .form-check-input:focus {
     border-color: #86b7fe;
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
+}*/
 
 /* Increase size of switch control */
 .form-switch .form-check-input {
@@ -38,13 +46,37 @@ footer {
     cursor: pointer;
 }
 
+.navbar-brand {
+    color: #ffffff !important; /* White color for logo text */
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus 
+{
+        color: #adb5bd !important; /* Light gray on hover for visual feedback */
+}
+
+/* Fixed header colors for WCAG contrast compliance */
 .bg-dark {
+    background-color: #2c3e50 !important; /* Dark blue-gray - better than pure black */
+}
+
+.nav-link {
+    color: #ffffff !important; /* White text on dark background = Good contrast (12.6:1) */
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: #adb5bd !important; /* Light gray on hover */
+}
+
+/*.bg-dark {
     background-color: lightgray !important;
 }
 
 .nav-link{
     color: black !important
-}
+}*/
 
 .form-switch .form-check-label {
     padding-left: 0.5rem;
@@ -56,16 +88,13 @@ footer {
     margin-bottom: 0.5rem;
 }
 
-/* Align legend with other form labels */
-/*fieldset.form-group legend {
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 0.75rem;
-    padding: 0;
-    color: #212529;
-    float: none;
-    width: auto;
-}*/
+.required-indicator {
+    color: #dc3545;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+    font-style: italic;
+}
 
 /* Add spacing between checkboxes */
 fieldset.form-group .form-check {
@@ -75,4 +104,27 @@ fieldset.form-group .form-check {
 /* Form group spacing */
 .form-group {
     margin-bottom: 1rem;
+}
+
+/* Inline field error styling */
+.field-error {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Ensure invalid fields have visual indicator */
+.form-control[aria-invalid="true"],
+.form-check-input[aria-invalid="true"] {
+    border-color: #dc3545;
+    border-width: 2px;
+}
+
+.form-control[aria-invalid="true"]:focus,
+.form-check-input[aria-invalid="true"]:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+footer {
+    flex-shrink: 0;
 }
